@@ -451,6 +451,8 @@ npm run docker:dev
 npm run docker:prod
 ```
 
+Running either compose file now starts a self-hosted MinIO instance (`delineate-storage`) plus a one-shot setup job that creates the mandatory `downloads` bucket before the API boots. You can access the MinIO console at http://localhost:9001 (user: `delineate`, password: `delineate123`) while the API resolves the storage service internally via `http://delineate-storage:9000`.
+
 ## Environment Variables
 
 Create a `.env` file in the project root:
@@ -462,9 +464,11 @@ PORT=3000
 
 # S3 Configuration
 S3_REGION=us-east-1
-S3_ENDPOINT=http://localhost:9000
-S3_ACCESS_KEY_ID=minioadmin
-S3_SECRET_ACCESS_KEY=minioadmin
+# When running with Docker Compose the service is reachable via delineate-storage
+S3_ENDPOINT=http://delineate-storage:9000
+# Use http://localhost:9000 when running the API outside of Docker Compose
+S3_ACCESS_KEY_ID=delineate
+S3_SECRET_ACCESS_KEY=delineate123
 S3_BUCKET_NAME=downloads
 S3_FORCE_PATH_STYLE=true
 
