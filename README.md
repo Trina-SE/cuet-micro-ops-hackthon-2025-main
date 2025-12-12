@@ -1,4 +1,28 @@
-# Delineate Hackathon Challenge - CUET Fest 2025
+# CUET MICRO-OPS HACKATHON 2025
+
+**Delineate Hackathon Challenge - CUET Fest 2025**
+
+[![CI](https://github.com/bongodev/cuet-micro-ops-hackthon-2025/actions/workflows/ci.yml/badge.svg)](https://github.com/bongodev/cuet-micro-ops-hackthon-2025/actions)
+
+**GitHub Repository**: https://github.com/bongodev/cuet-micro-ops-hackthon-2025
+
+---
+
+## 📋 Table of Contents
+
+- [The Scenario](#the-scenario)
+- [Architecture](#architecture)
+- [Hackathon Challenges](#hackathon-challenges)
+- [Technical Requirements](#technical-requirements)
+- [Tech Stack](#tech-stack)
+- [Quick Start](#quick-start)
+- [Environment Variables](#environment-variables)
+- [API Endpoints](#api-endpoints)
+- [Available Scripts](#available-scripts)
+- [Project Structure](#project-structure)
+- [Security Features](#security-features)
+
+---
 
 ## The Scenario
 
@@ -41,6 +65,33 @@ curl -X POST http://localhost:3000/v1/download/start \
 ```
 
 **Your challenge:** Design solutions that handle these variable processing times gracefully!
+
+---
+
+## Architecture
+
+### System Overview
+
+High-level architecture and data flow diagrams showing the complete system design:
+
+#### System Architecture Diagrams
+
+High-level architecture and data flow diagrams are provided below. For a detailed view, see the full PDF.
+![System Overview (One)](Diagram/a.drawio.png)
+![System Overview (One)](Diagram/b.drawio.png)
+
+
+![System Overview (Two)](Diagram/two.drawio.png)
+
+## Git Stategy
+If we follow this architecture, we will get best output
+![System Overview (One)](Diagram/One.drawio.png)
+Full design: [Diagram/full architecture.drawio.pdf](Diagram/full%20architecture.drawio.pdf)
+
+A complete implementation plan with API contracts, queues, schemas, proxy timeouts, and frontend integration lives in [ARCHITECTURE.md](ARCHITECTURE.md).
+📄 **Full Design Document**: [Diagram/full architecture.drawio.pdf](Diagram/full%20architecture.drawio.pdf)
+
+📘 **Implementation Plan**: A complete implementation plan with API contracts, queues, schemas, proxy timeouts, and frontend integration lives in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
@@ -309,7 +360,7 @@ Your pipeline must include these stages:
 
 #### CI/CD Pipeline Status
 
-[![CI](https://github.com/Trina-SE/cuet-micro-ops-hackthon-2025-main/workflows/CI/badge.svg)](https://github.com/Trina-SE/cuet-micro-ops-hackthon-2025-main/actions)
+The CI/CD pipeline is fully implemented and running on every push and pull request.
 
 #### Pipeline Overview
 
@@ -473,6 +524,8 @@ Errors in Sentry tagged with: trace_id=abc123
 
 ---
 
+---
+
 ## Technical Requirements
 
 | Requirement    | Version    |
@@ -492,28 +545,30 @@ Errors in Sentry tagged with: trace_id=abc123
 - **Error Tracking**: Sentry
 - **Documentation**: Scalar OpenAPI UI
 
+---
+
 ## Quick Start
 
 ### Local Development
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Create environment file
+# 2. Create environment file
 cp .env.example .env
 
-# Start development server (with hot reload, 5-15s delays)
+# 3. Start development server (with hot reload, 5-15s delays)
 npm run dev
 
-# Or start production server (10-120s delays)
+# OR start production server (10-120s delays)
 npm run start
 ```
 
-The server will start at http://localhost:3000
-
-- API Documentation: http://localhost:3000/docs
-- OpenAPI Spec: http://localhost:3000/openapi
+**🚀 Server URLs**:
+- **API Server**: http://localhost:3000
+- **API Documentation**: http://localhost:3000/docs
+- **OpenAPI Spec**: http://localhost:3000/openapi
 
 ### Using Docker
 
@@ -525,17 +580,22 @@ npm run docker:dev
 npm run docker:prod
 ```
 
-Running either compose file now starts:
+**🐳 Docker Compose includes**:
 
-- The API (`delineate-app`)
-- RustFS object storage (console: http://localhost:9001, auth `rustfsadmin/rustfsadmin`)
-- The observability dashboard (http://localhost:4173)
-- Jaeger all-in-one + OTLP collector (http://localhost:16686)
-- Prometheus (http://localhost:9090), Grafana (http://localhost:3001, admin/admin), and Node Exporter (scrape target on port 9100)
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| API Server | http://localhost:3000 | - |
+| RustFS Storage Console | http://localhost:9001 | `rustfsadmin/rustfsadmin` |
+| Observability Dashboard | http://localhost:4173 | - |
+| Jaeger UI | http://localhost:16686 | - |
+| Prometheus | http://localhost:9090 | - |
+| Grafana | http://localhost:3001 | `admin/admin` |
+| Node Exporter | http://localhost:9100 | - |
 
-The bucket bootstrap container still ensures `downloads` exists before the API begins accepting traffic.
-
-If you hit the dashboard from your host browser, ensure the frontend env points to host URLs (defaults already set): `VITE_API_BASE_URL=http://localhost:3000` and `VITE_OTEL_EXPORTER_URL=http://localhost:4318/v1/traces`. Service names like `delineate-app` are only resolvable inside the Docker network, not from the browser.
+**📝 Notes**:
+- The bucket bootstrap container ensures `downloads` bucket exists before the API starts
+- When accessing from host browser, use `VITE_API_BASE_URL=http://localhost:3000`
+- Service names like `delineate-app` are only resolvable inside Docker network
 
 ## Environment Variables
 
@@ -638,14 +698,30 @@ npm run docker:prod  # Start with Docker (production)
 
 ## Security Features
 
-- Request ID tracking for distributed tracing
-- Rate limiting with configurable windows
-- Security headers (HSTS, X-Frame-Options, etc.)
-- CORS configuration
-- Input validation with Zod schemas
-- Path traversal prevention for S3 keys
-- Graceful shutdown handling
+- ✅ Request ID tracking for distributed tracing
+- ✅ Rate limiting with configurable windows
+- ✅ Security headers (HSTS, X-Frame-Options, etc.)
+- ✅ CORS configuration
+- ✅ Input validation with Zod schemas
+- ✅ Path traversal prevention for S3 keys
+- ✅ Graceful shutdown handling
 
-## License
+---
 
-MIT
+## 📞 Support
+
+For questions or issues related to this hackathon challenge:
+- Open an issue on [GitHub](https://github.com/bongodev/cuet-micro-ops-hackthon-2025/issues)
+- Check the [ARCHITECTURE.md](ARCHITECTURE.md) for implementation guidance
+
+---
+
+## 📄 License
+
+See [LICENSE](LICENSE) file for details.
+
+---
+
+**Happy Hacking! 🚀**
+
+*CUET Fest 2025 - Micro-OPS Hackathon*
