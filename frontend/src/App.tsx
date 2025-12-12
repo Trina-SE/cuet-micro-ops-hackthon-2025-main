@@ -471,7 +471,7 @@ function App() {
           )}
         </article>
 
-        <article className="card">
+        <article className="card metrics-card">
           <h2>Performance Metrics</h2>
           <p className="muted">Last {metrics.length} requests</p>
           {metricsSummary.length === 0 ? (
@@ -506,7 +506,7 @@ function App() {
           )}
         </article>
 
-        <article className="card">
+        <article className="card error-card">
           <h2>Error Log</h2>
           <p className="muted">
             Captured via Sentry for failed API calls and UI issues.
@@ -533,9 +533,15 @@ function App() {
               ))}
             </ul>
           )}
-          <button className="ghost" type="button" onClick={showFeedbackDialog}>
-            Send Feedback
-          </button>
+          <div className="error-actions">
+            <button
+              className="ghost"
+              type="button"
+              onClick={showFeedbackDialog}
+            >
+              Send Feedback
+            </button>
+          </div>
         </article>
       </section>
 

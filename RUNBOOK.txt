@@ -1,0 +1,47 @@
+Challenge 4 Runbook
+====================
+
+What’s included (docker-compose dev/prod):
+- API (Hono) + RustFS storage (bucket: downloads).
+- Frontend observability dashboard (http://localhost:4173).
+- Jaeger all-in-one + OTLP HTTP collector (http://localhost:16686, OTLP: http://localhost:4318/v1/traces).
+- Prometheus (http://localhost:9090) scraping Node Exporter (http://localhost:9100).
+- Grafana with Prometheus datasource pre-provisioned (http://localhost:3001, admin/admin).
+- Node Exporter container for host metrics.
+
+How to start everything
+1) From repo root: `npm run docker:dev`
+2) Wait for containers to settle. Storage bucket `downloads` is auto-created by the setup job.
+
+Key URLs
+- API: http://localhost:3000
+- Frontend dashboard: http://localhost:4173
+- RustFS console: http://localhost:9001 (rustfsadmin/rustfsadmin)
+- Jaeger UI: http://localhost:16686
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3001 (admin/admin)
+
+Sentry projects (configured in env)
+- Backend DSN (Node): https://3f58fee64ae0f00df59e3a3a70c2407a@o4510517172895744.ingest.us.sentry.io/4510520970444800
+- Frontend DSN (React): https://5b9dd7047be25ec5692678ded7f2b6a3@o4510517172895744.ingest.us.sentry.io/4510521004589056
+
+Smoke tests and demo steps
+1) Health: `curl http://localhost:3000/health` (expect healthy).
+2) Start a job: `curl -X POST http://localhost:3000/v1/download/initiate -H "Content-Type: application/json" -d "{\"file_ids\":[70007,70014]}"`.
+   - If the files aren’t in storage, jobs will show “failed” (expected unless you upload `downloads/{id}.zip` to RustFS).
+3) Frontend: open http://localhost:4173, kick off a job, watch status, metrics, and traces.
+4) Sentry backend test: `curl -X POST "http://localhost:3000/v1/download/check?sentry_test=true" -H "Content-Type: application/json" -d "{\"file_id\":70000}"` (verify event in Sentry).
+5) Jaeger: click the trace link from the dashboard or open Jaeger and search for service `download-dashboard` or the API spans.
+6) Grafana: log in at http://localhost:3001, the Prometheus datasource is preloaded; Node Exporter dashboards are available under the provisioned folder.
+
+Notes
+- Frontend build args point to host URLs (localhost) so the browser can reach the API/collector; service names like `delineate-app` are only for inter-container traffic.
+- Node Exporter is dockerized and scraped by Prometheus; Grafana is also dockerized and points to that Prometheus instance.
+- To see successful downloads, upload artifacts to RustFS bucket `downloads` with keys like `downloads/70000.zip`.
+
+How it works without nginx (story form)
+- The browser (http://localhost:4173) talks directly to the API at http://localhost:3000. CORS on the API allows localhost origins and tracing headers (`traceparent`, `tracestate`), so no reverse proxy is required for development.
+- When you click “Initiate Download,” the frontend POSTs `/v1/download/initiate`, gets a `jobId`, and immediately starts polling `/v1/download/status/:jobId` every 5s. The API enqueues the work and simulates processing; if your `downloads/{id}.zip` exists in RustFS, the job finishes as completed; otherwise it fails with an unavailable message.
+- Every fetch is instrumented: the frontend injects `traceparent` so the backend spans share the same trace ID, exports its own spans to the Jaeger OTLP endpoint, and captures UI/API errors in Sentry (using the React DSN).
+- Health checks run every 15s from the UI to `/health`, showing storage connectivity. Metrics for these calls and job polls aggregate in the dashboard’s “Performance Metrics” card.
+- Observability stack runs sidecar: Jaeger for traces, Prometheus for metrics (scraping Node Exporter), Grafana for visualization. No nginx is in the path; all services are exposed via published localhost ports from Docker Compose.

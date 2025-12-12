@@ -131,6 +131,12 @@ button.ghost {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
+  align-items: start;
+}
+
+.metrics-card,
+.error-card {
+  min-height: 220px;
 }
 
 .health-grid {
@@ -210,8 +216,11 @@ button.ghost {
 .observability-grid table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-size: 0.9rem;
+  table-layout: fixed;
+  display: block;
+  overflow-x: auto;
 }
 
 .observability-grid th,
@@ -219,10 +228,19 @@ button.ghost {
   padding: 0.4rem 0.3rem;
   text-align: left;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  word-break: break-word;
+  white-space: normal;
 }
 
 .observability-grid code {
   color: #c084fc;
+  word-break: break-all;
+}
+
+.error-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .jobs-grid {
