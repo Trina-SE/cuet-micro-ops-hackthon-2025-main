@@ -1,9 +1,17 @@
 import * as Sentry from "@sentry/react";
 import type { Span } from "@opentelemetry/api";
-import { SpanStatusCode, context, propagation, trace } from "@opentelemetry/api";
+import {
+  SpanStatusCode,
+  context,
+  propagation,
+  trace,
+} from "@opentelemetry/api";
 import { ZoneContextManager } from "@opentelemetry/context-zone";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { BatchSpanProcessor, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
+import {
+  BatchSpanProcessor,
+  WebTracerProvider,
+} from "@opentelemetry/sdk-trace-web";
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";

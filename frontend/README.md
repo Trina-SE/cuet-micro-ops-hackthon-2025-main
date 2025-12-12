@@ -13,12 +13,12 @@ npm run dev
 
 Environment variables (`.env.local`):
 
-| Variable | Description |
-| --- | --- |
-| `VITE_API_BASE_URL` | Download API base URL (defaults to `http://localhost:3000`) |
-| `VITE_SENTRY_DSN` | Browser Sentry DSN; leave empty to disable error reporting |
-| `VITE_OTEL_EXPORTER_URL` | OTLP/HTTP collector endpoint (Jaeger exposes `http://localhost:4318/v1/traces`) |
-| `VITE_JAEGER_UI_URL` | The Jaeger UI used for deep-linking traces (defaults to `http://localhost:16686`) |
+| Variable                 | Description                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`      | Download API base URL (defaults to `http://localhost:3000`)                       |
+| `VITE_SENTRY_DSN`        | Browser Sentry DSN; leave empty to disable error reporting                        |
+| `VITE_OTEL_EXPORTER_URL` | OTLP/HTTP collector endpoint (Jaeger exposes `http://localhost:4318/v1/traces`)   |
+| `VITE_JAEGER_UI_URL`     | The Jaeger UI used for deep-linking traces (defaults to `http://localhost:16686`) |
 
 ## Features
 

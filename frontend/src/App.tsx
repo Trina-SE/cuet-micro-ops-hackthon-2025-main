@@ -78,9 +78,7 @@ const parseFileIds = (input: string): number[] =>
   input
     .split(/[\s,]+/)
     .map((token) => Number(token.trim()))
-    .filter(
-      (num) => Number.isFinite(num) && num >= 10000 && num <= 100000000,
-    );
+    .filter((num) => Number.isFinite(num) && num >= 10000 && num <= 100000000);
 
 function App() {
   const [fileIdsInput, setFileIdsInput] = useState("70000, 71000, 72000");
@@ -92,19 +90,22 @@ function App() {
   const [errorEvents, setErrorEvents] = useState<ErrorEvent[]>([]);
   const [lastTraceId, setLastTraceId] = useState<string | null>(null);
 
-  const recordMetric = useCallback((metric: Omit<RequestMetric, "id" | "timestamp">) => {
-    setMetrics((prev) => {
-      const next = [
-        {
-          ...metric,
-          id: crypto.randomUUID(),
-          timestamp: new Date().toISOString(),
-        },
-        ...prev,
-      ];
-      return next.slice(0, 30);
-    });
-  }, []);
+  const recordMetric = useCallback(
+    (metric: Omit<RequestMetric, "id" | "timestamp">) => {
+      setMetrics((prev) => {
+        const next = [
+          {
+            ...metric,
+            id: crypto.randomUUID(),
+            timestamp: new Date().toISOString(),
+          },
+          ...prev,
+        ];
+        return next.slice(0, 30);
+      });
+    },
+    [],
+  );
 
   const recordError = useCallback(
     (event: Omit<ErrorEvent, "id" | "timestamp">) => {
@@ -564,8 +565,8 @@ function App() {
         <div className="section-heading">
           <h2>Job activity</h2>
           <p className="muted">
-            Showing {sortedJobs.length || "no"} jobs. Active jobs poll every five
-            seconds.
+            Showing {sortedJobs.length || "no"} jobs. Active jobs poll every
+            five seconds.
           </p>
         </div>
         {sortedJobs.length === 0 ? (
@@ -622,7 +623,9 @@ function App() {
                 </dl>
                 <footer>
                   {job.status === "completed" && job.downloadUrl ? (
-                    <button onClick={() => handleDownload(job)}>Download</button>
+                    <button onClick={() => handleDownload(job)}>
+                      Download
+                    </button>
                   ) : null}
                   {job.status === "failed" ? (
                     <button
@@ -634,8 +637,7 @@ function App() {
                     </button>
                   ) : null}
                   <span className="muted">
-                    Last sync:{" "}
-                    {new Date(job.lastSyncedAt).toLocaleTimeString()}
+                    Last sync: {new Date(job.lastSyncedAt).toLocaleTimeString()}
                   </span>
                 </footer>
               </article>

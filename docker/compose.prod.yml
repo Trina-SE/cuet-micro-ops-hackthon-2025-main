@@ -131,4 +131,3 @@ volumes:
   delineate-storage-data:
   delineate-storage-logs:
   delineate-grafana-data:
-  delineate-storage-logs:
