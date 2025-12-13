@@ -175,37 +175,30 @@ jobs:
 
   # Stage 4: Deploy (Optional - Bonus)
   deploy:
-    name: Deploy to Self-Hosted Runner
-    runs-on: self-hosted
-    needs: build
+    name: "Deploy: Production (Optional)"
+    runs-on: ubuntu-24.04
+    needs: [build, security-scan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Create .env files
+      - name: 🚀 Deploy Status
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          echo "${{ secrets.ENV_STORAGE_FILE }}" > .env.storage
-          # Create empty files if secrets are missing to avoid docker compose errors
-          touch .env
-          touch .env.storage
+          echo "🚀 Deployment Step"
+          echo "=================="
+          echo "✅ Build and security scan completed successfully"
+          echo "📦 Docker image is ready for deployment"
+          echo ""
+          echo "To deploy manually:"
+          echo "1. Push image to Docker Hub/Registry"
+          echo "2. Deploy to Railway, Render, or Fly.io"
+          echo "3. Configure environment variables"
+          echo ""
+          echo "🎉 Pipeline completed successfully!"
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Pull Docker image
-        run: docker compose -f docker/compose.prod.yml pull
-
-      - name: Deploy with Docker Compose
-        run: docker compose -f docker/compose.prod.yml up -d
   # Pipeline Status Summary
   pipeline-status:
     name: "Pipeline Status Summary"
     runs-on: ubuntu-24.04
-    needs: [lint, test, build, security-scan, deploy]
+    needs: [lint, test, build, security-scan]
     if: always()
     steps:
       - name: ✅ Check pipeline status
@@ -216,7 +209,6 @@ jobs:
           echo "Tests: ${{ needs.test.result }}"
           echo "Build: ${{ needs.build.result }}"
           echo "Security Scan: ${{ needs.security-scan.result }}"
-          echo "Deploy: ${{ needs.deploy.result }}"
 
           if [[ "${{ needs.lint.result }}" != "success" ]] || \
              [[ "${{ needs.test.result }}" != "success" ]] || \
@@ -226,5 +218,5 @@ jobs:
             exit 1
           else
             echo "✅ Pipeline succeeded!"
+            echo "🚀 Ready for deployment (manual or automated)"
           fi
-
